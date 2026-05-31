@@ -47,7 +47,7 @@ export default function App() {
 
   const handleAdminSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (adminPassword === 'Gabyneuropedia') {
+    if (adminPassword === 'Gabyneuropedia' || adminPassword === 'Zulybeth97@') {
       setIsAdminUnlocked(true);
       setIsAuthModalOpen(false);
       setAdminPassword('');
@@ -178,7 +178,7 @@ export default function App() {
           onClick={handleScrollToForm}
           className="flex items-center gap-2 bg-brand-orange text-white text-xs font-bold tracking-widest uppercase py-3 px-5 rounded-full shadow-lg hover:shadow-xl hover:bg-brand-orange/95 cursor-pointer max-w-xs"
         >
-          <Download className="w-4 h-4" /> Bajar Checklist PDF
+          <Download className="w-4 h-4" /> Abrir Checklist
         </button>
       </div>
 
@@ -218,7 +218,7 @@ export default function App() {
                   onClick={handleScrollToForm}
                   className="bg-brand-orange hover:bg-brand-orange/95 text-white font-bold text-xs uppercase tracking-widest py-4 px-8 rounded-lg shadow-lg hover:shadow-xl hover:translate-y-[-1px] transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
-                  <Download className="w-4.5 h-4.5" /> Descargar Checklist Gratis
+                  <Download className="w-4.5 h-4.5" /> Completar Checklist Gratis
                 </button>
                 
                 <button
@@ -278,7 +278,7 @@ export default function App() {
                 {/* Micro Floating badge */}
                 <div className="absolute -bottom-5 right-2 sm:-right-4 z-30 bg-brand-gold text-navy-950 p-3.5 rounded-xl shadow-2xl border border-white/25 flex items-center gap-2 max-w-[180px]">
                   <div className="p-1 rounded bg-navy-900 border text-brand-gold border-white/10 shrink-0 text-xs">🚀</div>
-                  <p className="text-[10px] leading-tight font-sans font-bold">100% Digital en PDF para Móvil</p>
+                  <p className="text-[10px] leading-tight font-sans font-bold">HTML interactivo + PDF al finalizar</p>
                 </div>
 
               </div>
@@ -361,7 +361,7 @@ export default function App() {
                 onClick={handleScrollToForm}
                 className="w-full bg-navy-900 border border-navy-900 hover:bg-navy-900/95 text-brand-gold font-bold text-xs uppercase tracking-widest py-3 rounded-lg shadow-sm transition-all cursor-pointer"
               >
-                Inscribirme y Descargar
+                Inscribirme y Completar
               </button>
             </div>
 
@@ -404,7 +404,7 @@ export default function App() {
                 La ciencia no muerde. Toma el control del neurodesarrollo en tu familia.
               </h2>
               <p className="text-slate-600 text-sm leading-relaxed">
-                Su cerebro no está roto, solo se comunica bajo otra estructura de conexiones. Regístrate de forma segura y recibe el documento PDF para leer directamente desde tu dispositivo móvil.
+                Su cerebro no está roto, solo se comunica bajo otra estructura de conexiones. Regístrate de forma segura, completa el checklist en HTML y genera tu PDF cuando termines.
               </p>
 
               <div className="bg-white/50 border border-slate-200 rounded-2xl p-5 md:p-6 space-y-3">
@@ -413,7 +413,7 @@ export default function App() {
                   Al registrarte obtienes:
                 </div>
                 <ul className="text-xs text-slate-500 space-y-2 leading-relaxed">
-                  <li>✔ <strong>Checklist Completo en PDF</strong>: Listo para imprimir y rellenar.</li>
+                  <li>✔ <strong>Checklist Completo en HTML</strong>: Márcalo online y luego imprímelo o guárdalo como PDF.</li>
                   <li>✔ <strong>Suscripción exclusiva</strong>: Clases y consejos semanales de la Dra. Gaby.</li>
                   <li>✔ <strong>Invitación prioritaria</strong>: Acceso anticipado a futuros programas y mentorías uno a uno.</li>
                 </ul>
@@ -520,6 +520,23 @@ export default function App() {
           <p className="text-[10px] text-slate-600 pt-3 border-t border-white/5">
             © 2026 gabyneuropedia. Todos los derechos reservados. Diseñado bajo el Método C.L.A.R.O. para familias extraordinarias.
           </p>
+          <div className="flex justify-center items-center gap-2 mt-3">
+            <img 
+              src="/VHGM.jpg" 
+              alt="Dr. Victor Garcia M" 
+              className="w-5 h-5 rounded-full border border-white/20 object-cover shrink-0" 
+            />
+            <p className="text-[10px] text-slate-500">
+              <a 
+                href="https://48hours.live" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-brand-gold transition-colors"
+              >
+                Built by Dr. Victor Garcia M at 48hours.live
+              </a>
+            </p>
+          </div>
         </div>
       </footer>
 

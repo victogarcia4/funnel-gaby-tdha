@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checklist Interactivo TDAH 24 Puntos - GabyNeuroPedia</title>
+  <style>
+    @page {
+      size: letter;
+      margin: 1.2cm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy: #0b1c3c;
+      --orange: #ff6b00;
+      --gold: #f4d35e;
+      --cream: #fffbf5;
+      --mint: #e8f3ee;
+      --ink: #233044;
+      --muted: #657184;
+      --line: #dde4ec;
+      --white: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+
+    .app-shell {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      margin: -24px -16px 24px;
+      padding: 14px 16px;
+      background: rgba(11, 28, 60, 0.96);
+      color: var(--white);
+      box-shadow: 0 8px 30px rgba(11, 28, 60, 0.18);
+    }
+
+    .topbar-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .brand-name {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .brand-subtitle {
+      color: #c8d0dc;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button,
+    .link-button {
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      text-decoration: none;
+      transition: transform 160ms ease, opacity 160ms ease;
+    }
+
+    button:hover,
+    .link-button:hover {
+      transform: translateY(-1px);
+      opacity: 0.92;
+    }
+
+    .primary {
+      background: var(--orange);
+      color: var(--white);
+    }
+
+    .secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid rgba(11, 28, 60, 0.1);
+      border-radius: 8px;
+      box-shadow: 0 18px 55px rgba(11, 28, 60, 0.08);
+    }
+
+    .intro {
+      padding: 34px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--orange);
+      background: rgba(255, 107, 0, 0.08);
+      border: 1px solid rgba(255, 107, 0, 0.16);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      color: var(--navy);
+      font-size: clamp(30px, 5vw, 52px);
+      line-height: 1.05;
+      margin: 18px 0 16px;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 720px;
+      margin: 0;
+    }
+
+    .medical-note {
+      margin-top: 22px;
+      padding: 16px;
+      border-left: 4px solid var(--orange);
+      background: #fff3e8;
+      border-radius: 8px;
+      color: #5c341f;
+      font-size: 13px;
+    }
+
+    .score-panel {
+      padding: 24px;
+      background: var(--navy);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .score-title {
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .score-number {
+      font-size: 58px;
+      line-height: 1;
+      font-weight: 900;
+      margin-top: 8px;
+    }
+
+    .score-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+    }
+
+    .result-message {
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: #e8edf5;
+      font-size: 13px;
+    }
+
+    .section {
+      padding: 24px;
+      margin-top: 18px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      border-bottom: 3px solid var(--gold);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      color: var(--navy);
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      margin: 6px 0 0;
+      font-size: 13px;
+    }
+
+    .section-count {
+      white-space: nowrap;
+      font-weight: 900;
+      color: var(--orange);
+      font-size: 14px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 12px;
+      min-height: 100%;
+      padding: 16px;
+      background: #fbfcfe;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      cursor: pointer;
+      break-inside: avoid;
+    }
+
+    .item input {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--orange);
+      margin: 2px 0 0;
+      cursor: pointer;
+    }
+
+    .item:has(input:checked) {
+      background: #fff8ef;
+      border-color: rgba(255, 107, 0, 0.5);
+      box-shadow: inset 0 0 0 1px rgba(255, 107, 0, 0.22);
+    }
+
+    .item-code {
+      color: var(--orange);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .item-text {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 800;
+      margin: 0 0 8px;
+    }
+
+    .item-help {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    textarea,
+    input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      font: inherit;
+      color: var(--ink);
+      background: #fbfcfe;
+    }
+
+    textarea {
+      min-height: 122px;
+      resize: vertical;
+    }
+
+    label.field-label {
+      display: block;
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .interpretation {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .interpret-card {
+      background: #fbfcfe;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 15px;
+      font-size: 13px;
+    }
+
+    .interpret-card strong {
+      color: var(--navy);
+    }
+
+    .footer-card {
+      margin-top: 18px;
+      padding: 24px;
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .footer-card h2 {
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .footer-card p {
+      color: #d6dde8;
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .print-only {
+      display: none;
+    }
+
+    @media (max-width: 820px) {
+      .topbar-inner,
+      .hero,
+      .notes-grid,
+      .footer-card {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        display: grid;
+      }
+
+      .actions {
+        justify-content: stretch;
+      }
+
+      .actions button,
+      .actions .link-button {
+        flex: 1 1 auto;
+      }
+
+      .checklist,
+      .interpretation {
+        grid-template-columns: 1fr;
+      }
+
+      .intro,
+      .score-panel,
+      .section {
+        padding: 20px;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .app-shell {
+        max-width: none;
+        padding: 0;
+      }
+
+      .topbar,
+      .no-print {
+        display: none !important;
+      }
+
+      .print-only {
+        display: block;
+      }
+
+      .hero,
+      .section,
+      .footer-card {
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0 0 14px;
+      }
+
+      .hero {
+        display: block;
+      }
+
+      .intro {
+        border: 0;
+        padding: 0 0 14px;
+      }
+
+      .score-panel {
+        color: var(--navy);
+        background: #f7f9fc;
+        border: 1px solid var(--line);
+        padding: 14px;
+      }
+
+      .score-title,
+      .score-number,
+      .section-count,
+      .footer-card h2 {
+        color: var(--navy);
+      }
+
+      .score-row {
+        border-color: var(--line);
+      }
+
+      .result-message {
+        color: var(--ink);
+        background: white;
+        border-color: var(--line);
+      }
+
+      .section {
+        padding: 0 0 14px;
+        border: 0;
+      }
+
+      .checklist {
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+
+      .item {
+        padding: 9px 10px;
+      }
+
+      .item input {
+        print-color-adjust: exact;
+      }
+
+      textarea,
+      input[type="text"] {
+        border-color: #9aa7b5;
+      }
+
+      .footer-card {
+        display: block;
+        color: var(--navy);
+        background: #f7f9fc;
+        border: 1px solid var(--line);
+        padding: 14px;
+        break-inside: avoid;
+      }
+
+      .footer-card p {
+        color: var(--ink);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar no-print">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">G</div>
+        <div>
+          <div class="brand-name">GabyNeuroPedia</div>
+          <div class="brand-subtitle">Checklist interactivo imprimible</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="secondary" type="button" id="resetButton">Limpiar marcas</button>
+        <button class="primary" type="button" id="printButton">Imprimir / guardar PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="app-shell">
+    <section class="hero">
+      <div class="panel intro">
+        <span class="eyebrow">Recurso gratuito</span>
+        <h1>Checklist de Observacion Diferencial TDAH</h1>
+        <p class="lead">
+          Marca las conductas que observas con frecuencia. Al terminar, revisa el resumen automatico y usa el boton
+          <strong>Imprimir / guardar PDF</strong> para conservar una copia con tus respuestas.
+        </p>
+        <div class="medical-note">
+          <strong>Importante:</strong> este material es educativo y no constituye diagnostico medico. Si los resultados
+          te preocupan, agenda una evaluacion formal con neuropediatria, psiquiatria infantil o neuropsicologia.
+        </div>
+      </div>
+
+      <aside class="panel score-panel" aria-live="polite">
+        <div>
+          <div class="score-title">Resumen de respuestas</div>
+          <div class="score-number"><span id="totalCount">0</span>/24</div>
+        </div>
+        <div class="score-grid">
+          <div class="score-row"><span>Conductuales</span><strong><span id="behavioralCount">0</span>/8</strong></div>
+          <div class="score-row"><span>Ambientales / medicos</span><strong><span id="differentialCount">0</span>/8</strong></div>
+          <div class="score-row"><span>Socioemocionales</span><strong><span id="emotionalCount">0</span>/8</strong></div>
+        </div>
+        <div class="result-message" id="resultMessage">
+          Empieza marcando las senales observadas para generar tu lectura preliminar.
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel section">
+      <div class="section-header">
+        <div>
+          <h2>Datos para tu consulta</h2>
+          <p class="section-copy">Opcional. Estos campos tambien se imprimen si decides guardar el PDF.</p>
+        </div>
+      </div>
+      <div class="notes-grid">
+        <div>
+          <label class="field-label" for="childName">Nombre o iniciales del nino/a</label>
+          <input id="childName" type="text" placeholder="Ej. Lucas G." />
+        </div>
+        <div>
+          <label class="field-label" for="childAge">Edad</label>
+          <input id="childAge" type="text" placeholder="Ej. 7 anos" />
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section" data-section="behavioral">
+      <div class="section-header">
+        <div>
+          <h2>Seccion A: Marcadores conductuales</h2>
+          <p class="section-copy">Senales asociadas con inatencion, impulsividad y funciones ejecutivas.</p>
+        </div>
+        <div class="section-count"><span data-count="behavioral">0</span>/8</div>
+      </div>
+      <div class="checklist">
+        <label class="item"><input type="checkbox" data-category="behavioral" /><span><div class="item-code">A1</div><p class="item-text">Se distrae con facilidad ante estimulos irrelevantes y suele extraviar objetos de uso diario.</p><p class="item-help">Puede relacionarse con inatencion, fatiga, falta de sueno o estres emocional.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="behavioral" /><span><div class="item-code">A2</div><p class="item-text">Le cuesta permanecer sentado y mueve manos, pies o cuerpo constantemente.</p><p class="item-help">Observa si ocurre en varios contextos o solo en momentos de cansancio o aburrimiento.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="behavioral" /><span><div class="item-code">A3</div><p class="item-text">Responde antes de que terminen la pregunta o interrumpe actividades de otros.</p><p class="item-help">La impulsividad requiere diferenciarse de ansiedad, emocion intensa o falta de habilidades sociales.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="behavioral" /><span><div class="item-code">A4</div><p class="item-text">Tiene dificultad para planificar tareas con varios pasos si nadie le organiza la secuencia.</p><p class="item-help">Las funciones ejecutivas ayudan a iniciar, ordenar y sostener una tarea.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="behavioral" /><span><div class="item-code">A5</div><p class="item-text">Procrastina o se paraliza ante tareas que parecen largas o tienen muchas instrucciones.</p><p class="item-help">No siempre es desobediencia; puede ser sobrecarga de memoria de trabajo.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="behavioral" /><span><div class="item-code">A6</div><p class="item-text">Olvida con frecuencia donde dejo mochila, utiles, juguetes u objetos personales.</p><p class="item-help">La memoria de trabajo se afecta tambien por estres y rutinas poco claras.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="behavioral" /><span><div class="item-code">A7</div><p class="item-text">Se bloquea ante muchas opciones o tarda demasiado en tomar decisiones simples.</p><p class="item-help">La sobrecarga ejecutiva puede sentirse como quedarse "congelado".</p></span></label>
+        <label class="item"><input type="checkbox" data-category="behavioral" /><span><div class="item-code">A8</div><p class="item-text">Su rendimiento es muy inconsistente: un dia puede hacerlo bien y al siguiente no.</p><p class="item-help">La inconsistencia es una pista importante para conversar con el especialista.</p></span></label>
+      </div>
+    </section>
+
+    <section class="panel section" data-section="differential">
+      <div class="section-header">
+        <div>
+          <h2>Seccion B: Factores ambientales y medicos</h2>
+          <p class="section-copy">Variables que pueden imitar o intensificar sintomas parecidos al TDAH.</p>
+        </div>
+        <div class="section-count"><span data-count="differential">0</span>/8</div>
+      </div>
+      <div class="checklist">
+        <label class="item"><input type="checkbox" data-category="differential" /><span><div class="item-code">B1</div><p class="item-text">Tiene habitos de sueno irregulares o duerme menos de 9 a 10 horas con frecuencia.</p><p class="item-help">La falta de sueno puede imitar inatencion e irritabilidad.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="differential" /><span><div class="item-code">B2</div><p class="item-text">Supera regularmente 1.5 a 2 horas diarias de pantallas.</p><p class="item-help">La sobreestimulacion digital puede alterar tolerancia a la espera y atencion sostenida.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="differential" /><span><div class="item-code">B3</div><p class="item-text">Se muestra ansioso, preocupado o perfeccionista de forma recurrente.</p><p class="item-help">La ansiedad infantil puede verse como inquietud o distraccion.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="differential" /><span><div class="item-code">B4</div><p class="item-text">Hay estres cronico, conflictos familiares o cuidadores emocionalmente agotados.</p><p class="item-help">El ambiente emocional influye directamente en la regulacion del nino.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="differential" /><span><div class="item-code">B5</div><p class="item-text">Hubo cambios recientes: mudanza, separacion, duelo, cambio de colegio o perdida.</p><p class="item-help">El estres de adaptacion puede parecer falta de atencion o conducta oposicionista.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="differential" /><span><div class="item-code">B6</div><p class="item-text">Consume con frecuencia azucar, colorantes, ultraprocesados o estimulantes.</p><p class="item-help">Algunos patrones alimentarios empeoran energia, sueno e irritabilidad.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="differential" /><span><div class="item-code">B7</div><p class="item-text">Hay sospecha de problemas visuales o auditivos no corregidos.</p><p class="item-help">No ver u oir bien puede ser interpretado como distraccion.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="differential" /><span><div class="item-code">B8</div><p class="item-text">Tiene enfermedad cronica, medicacion regular o recuperacion reciente de infeccion/cirugia.</p><p class="item-help">Factores fisiologicos y medicamentos pueden modificar atencion y conducta.</p></span></label>
+      </div>
+    </section>
+
+    <section class="panel section" data-section="emotional">
+      <div class="section-header">
+        <div>
+          <h2>Seccion C: Marcadores socioemocionales</h2>
+          <p class="section-copy">Senales de regulacion emocional, autoestima, vinculo social o procesamiento sensorial.</p>
+        </div>
+        <div class="section-count"><span data-count="emotional">0</span>/8</div>
+      </div>
+      <div class="checklist">
+        <label class="item"><input type="checkbox" data-category="emotional" /><span><div class="item-code">C1</div><p class="item-text">Explota con rabietas intensas ante frustraciones rutinarias y tarda mucho en calmarse.</p><p class="item-help">La regulacion emocional tambien se afecta por cansancio, estres o ansiedad.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="emotional" /><span><div class="item-code">C2</div><p class="item-text">Rechaza tareas que requieren esfuerzo mental sostenido.</p><p class="item-help">Puede ser disfuncion ejecutiva, miedo al fracaso o bloqueo emocional.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="emotional" /><span><div class="item-code">C3</div><p class="item-text">Tiene dificultades sociales marcadas, rechazo de companeros o experiencias de bullying.</p><p class="item-help">El dolor social puede expresarse como impulsividad o aislamiento.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="emotional" /><span><div class="item-code">C4</div><p class="item-text">Presenta baja autoestima o frases de autocritica como "soy malo" o "no puedo".</p><p class="item-help">La verguenza y el miedo a fallar pueden paralizar el aprendizaje.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="emotional" /><span><div class="item-code">C5</div><p class="item-text">Tiene ansiedad por separacion o apego ansioso excesivo hacia cuidadores.</p><p class="item-help">Cuando no se siente seguro, la concentracion puede caer rapidamente.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="emotional" /><span><div class="item-code">C6</div><p class="item-text">Muestra rigidez extrema ante cambios de rutina o crisis ante imprevistos.</p><p class="item-help">La rigidez requiere mirar otros perfiles del neurodesarrollo.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="emotional" /><span><div class="item-code">C7</div><p class="item-text">Tiene sensibilidades sensoriales a texturas, sonidos, luces o etiquetas de ropa.</p><p class="item-help">La incomodidad sensorial puede detonar conducta desregulada.</p></span></label>
+        <label class="item"><input type="checkbox" data-category="emotional" /><span><div class="item-code">C8</div><p class="item-text">Presenta rituales, conductas repetitivas o necesidad de alinear/tocar objetos.</p><p class="item-help">Estas senales ameritan evaluacion diferencial, especialmente si interfieren con la vida diaria.</p></span></label>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-header">
+        <div>
+          <h2>Notas para llevar al especialista</h2>
+          <p class="section-copy">Escribe ejemplos concretos: cuando ocurre, cuanto dura, que lo mejora y que lo empeora.</p>
+        </div>
+      </div>
+      <div class="notes-grid">
+        <div>
+          <label class="field-label" for="homeNotes">Observaciones en casa</label>
+          <textarea id="homeNotes" placeholder="Ej. ocurre al hacer tareas despues del colegio, mejora si descansamos 20 minutos..."></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="schoolNotes">Observaciones en escuela o terapia</label>
+          <textarea id="schoolNotes" placeholder="Ej. la maestra reporta que interrumpe mas durante actividades grupales..."></textarea>
+        </div>
+      </div>
+
+      <div class="interpretation">
+        <div class="interpret-card"><strong>4+ conductuales:</strong> conviene revisar marcadores compatibles con TDAH y su frecuencia en distintos contextos.</div>
+        <div class="interpret-card"><strong>3+ ambientales:</strong> prioriza sueno, pantallas, estres, salud visual/auditiva y otros factores modificables.</div>
+        <div class="interpret-card"><strong>3+ socioemocionales:</strong> explora ansiedad, autoestima, sensorialidad, vinculo social y posibles comorbilidades.</div>
+      </div>
+    </section>
+
+    <section class="footer-card">
+      <div>
+        <h2>Proximo paso recomendado</h2>
+        <p>
+          El checklist organiza tus observaciones. El siguiente paso es aprender que hacer con ellas:
+          estrategias de rutina, limites, calma y comunicacion con el colegio bajo el Metodo C.L.A.R.O.
+        </p>
+      </div>
+      <a class="link-button primary no-print" href="https://instagram.com/gabyneuropedia" target="_blank" rel="noopener noreferrer">Ver ebook</a>
+      <p class="print-only">Instagram: @gabyneuropedia | Web: gabyneuropedia.com</p>
+    </section>
+  </main>
+
+  <script>
+    const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"][data-category]'));
+    const counters = {
+      behavioral: document.getElementById('behavioralCount'),
+      differential: document.getElementById('differentialCount'),
+      emotional: document.getElementById('emotionalCount')
+    };
+    const inlineCounters = {
+      behavioral: document.querySelector('[data-count="behavioral"]'),
+      differential: document.querySelector('[data-count="differential"]'),
+      emotional: document.querySelector('[data-count="emotional"]')
+    };
+    const totalCount = document.getElementById('totalCount');
+    const resultMessage = document.getElementById('resultMessage');
+
+    function getCounts() {
+      return checkboxes.reduce((acc, checkbox) => {
+        if (checkbox.checked) {
+          acc.total += 1;
+          acc[checkbox.dataset.category] += 1;
+        }
+        return acc;
+      }, { total: 0, behavioral: 0, differential: 0, emotional: 0 });
+    }
+
+    function getMessage(counts) {
+      if (counts.total === 0) {
+        return 'Empieza marcando las senales observadas para generar tu lectura preliminar.';
+      }
+      if (counts.behavioral >= 4 && counts.differential >= 3) {
+        return 'Hay marcadores conductuales y factores diferenciales relevantes. Lleva este resultado a consulta y revisa primero sueno, pantallas, salud y contexto emocional.';
+      }
+      if (counts.behavioral >= 4) {
+        return 'Hay varios marcadores conductuales. Este resultado no diagnostica, pero si justifica ordenar observaciones y consultar con un especialista.';
+      }
+      if (counts.differential >= 3) {
+        return 'Predominan factores ambientales o medicos que pueden parecer TDAH. Prioriza revisar sueno, pantallas, estres, vision, audicion y salud general.';
+      }
+      if (counts.emotional >= 3) {
+        return 'Aparecen senales socioemocionales importantes. Conviene explorar ansiedad, autoestima, relaciones y procesamiento sensorial.';
+      }
+      return 'Tienes primeras observaciones registradas. Completa notas concretas y guarda o imprime este documento para seguimiento.';
+    }
+
+    function updateSummary() {
+      const counts = getCounts();
+      totalCount.textContent = counts.total;
+      Object.keys(counters).forEach((key) => {
+        counters[key].textContent = counts[key];
+        inlineCounters[key].textContent = counts[key];
+      });
+      resultMessage.textContent = getMessage(counts);
+    }
+
+    checkboxes.forEach((checkbox) => checkbox.addEventListener('change', updateSummary));
+
+    document.getElementById('resetButton').addEventListener('click', () => {
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      updateSummary();
+    });
+
+    document.getElementById('printButton').addEventListener('click', () => {
+      updateSummary();
+      window.print();
+    });
+
+    updateSummary();
+  </script>
+</body>
+</html>

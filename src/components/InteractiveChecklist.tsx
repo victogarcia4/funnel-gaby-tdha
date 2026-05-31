@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CHECKLIST_ITEMS } from '../data';
 import { ClipboardList, CheckCircle, Info, RotateCcw, AlertTriangle } from 'lucide-react';
+import EbookPromoModal from './EbookPromoModal';
 
 interface InteractiveChecklistProps {
   onFormScrollRequest: () => void;
@@ -9,6 +10,8 @@ interface InteractiveChecklistProps {
 export default function InteractiveChecklist({ onFormScrollRequest }: InteractiveChecklistProps) {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showExplanation, setShowExplanation] = useState<string | null>(null);
+  const [showEbookModal, setShowEbookModal] = useState(false);
+  const [hasShownModal, setHasShownModal] = useState(false);
 
   const handleToggleItem = (id: string) => {
     setSelectedItems(prev => 
@@ -27,6 +30,14 @@ export default function InteractiveChecklist({ onFormScrollRequest }: Interactiv
   const emotionalCount = selectedItems.filter(id => id.startsWith('e')).length;
   const totalCount = selectedItems.length;
 
+  // Show ebook promo modal when user selects 5+ items
+  useEffect(() => {
+    if (totalCount >= 5 && !hasShownModal) {
+      setShowEbookModal(true);
+      setHasShownModal(true);
+    }
+  }, [totalCount, hasShownModal]);
+
   // Real-time medical-grade feedback summary
   const getFeedbackMessage = () => {
     if (totalCount === 0) {
@@ -40,7 +51,7 @@ export default function InteractiveChecklist({ onFormScrollRequest }: Interactiv
     if (differentialCount > 0 && behavioralCount > 0) {
       return {
         title: '⚠️ Señales mixtas detectadas (Requiere Diagnóstico Diferencial)',
-        text: 'Hay rasgos comunes del TDAH, pero también factores de alerta ambiental (sueño, pantallas o estrés). En niños, la privación de sueño y el bombardeo dopaminérgico de pantallas imitan de forma perfecta al TDAH. Descargar el reporte completo te dará las pautas para aislar estos factores.',
+        text: 'Hay rasgos comunes del TDAH, pero también factores de alerta ambiental (sueño, pantallas o estrés). En niños, la privación de sueño y el bombardeo dopaminérgico de pantallas imitan de forma perfecta al TDAH. El libro "Sin Filtros! El cerebro de mi hijo no está roto" profundiza en cómo aislar estos factores antes de considerar medicación.',
         colorClass: 'text-brand-orange bg-brand-orange/5 border-brand-orange/20'
       };
     }
@@ -48,7 +59,7 @@ export default function InteractiveChecklist({ onFormScrollRequest }: Interactiv
     if (differentialCount > 1) {
       return {
         title: '🌱 Altas señales ambientales (Pseudo-TDAH posible)',
-        text: 'Los hábitos de sueño y sobreestimulación de pantallas seleccionados son los principales causantes de "falsa inatención" infantil. Corregir estas variables es el primer paso recomendado por la Dra. Gaby antes de iniciar diagnósticos permanentes.',
+        text: 'Los hábitos de sueño y sobreestimulación de pantallas seleccionados son los principales causantes de "falsa inatención" infantil. Corregir estas variables es el primer paso recomendado antes de diagnósticos permanentes. Descubre el protocolo completo en nuestro ebook "Sin Filtros!".',
         colorClass: 'text-teal-800 bg-brand-mint/40 border-teal-800/10'
       };
     }
@@ -56,14 +67,14 @@ export default function InteractiveChecklist({ onFormScrollRequest }: Interactiv
     if (behavioralCount > 1) {
       return {
         title: '🔎 Indicadores conductuales presentes',
-        text: 'Has seleccionado marcadores habituales de inatención o impulsividad. El paso idóneo es registrar estas conductas de forma objetiva con nuestro Checklist Completo para documentar la frecuencia cuando visites al médico de cabecera.',
+        text: 'Has seleccionado marcadores habituales de inatención o impulsividad. El paso idóneo es registrar estas conductas objetivamente para documentar la frecuencia. El ebook "Sin Filtros! El cerebro de mi hijo no está roto" incluye hojas de trabajo detalladas para preparar tu consulta médica.',
         colorClass: 'text-navy-700 bg-[#ebf3ff] border-navy-700/10'
       };
     }
 
     return {
       title: 'Primeras observaciones documentadas',
-      text: 'Sigue seleccionando para refinar las conclusiones preliminares. Recuerda que este ejercicio entrena tu ojo clínico como padre o cuidador para ser el mejor aliado de tu pediatra.',
+      text: 'Sigue seleccionando para refinar las conclusiones preliminares. Recuerda: este ejercicio entrena tu ojo clínico como padre o cuidador para ser el mejor aliado de tu pediatra. No reemplaza una evaluación profesional.',
       colorClass: 'text-slate-700 bg-slate-50 border-slate-200'
     };
   };
@@ -184,15 +195,22 @@ export default function InteractiveChecklist({ onFormScrollRequest }: Interactiv
       {/* Action Prompt */}
       <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
         <p className="text-xs text-slate-500 max-w-md text-center sm:text-left leading-relaxed">
-          Esto es solo un ensayo. Para recibir el <strong>Checklist Oficial en PDF</strong> con la escala completa de 24 puntos, las preguntas guiadas para consulta y las hojas de trabajo, rellena nuestro formulario de captación.
+          Esto es solo un ensayo. Para abrir el <strong>Checklist Oficial interactivo</strong> con la escala completa de 24 puntos, marcarlo en HTML y generar tu PDF al final, rellena nuestro formulario de captación.
         </p>
         <button
           onClick={onFormScrollRequest}
           className="bg-brand-orange hover:bg-brand-orange/95 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
         >
-          Ir a Descargar Checklist Principal
+          Ir a Completar Checklist Principal
         </button>
       </div>
+
+      {/* Ebook Promo Modal */}
+      <EbookPromoModal
+        isOpen={showEbookModal}
+        onClose={() => setShowEbookModal(false)}
+        itemCount={totalCount}
+      />
 
     </div>
   );

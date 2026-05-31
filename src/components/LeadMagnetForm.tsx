@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { LeadData } from '../types';
-import { Mail, User, Baby, CheckCircle2, FileDown, BookOpen, AlertCircle, Sparkles } from 'lucide-react';
+import { Mail, User, Baby, CheckCircle2, ClipboardCheck, BookOpen, AlertCircle, Sparkles } from 'lucide-react';
 
 export default function LeadMagnetForm() {
   const [formData, setFormData] = useState<LeadData>({
@@ -12,6 +12,7 @@ export default function LeadMagnetForm() {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -22,7 +23,7 @@ export default function LeadMagnetForm() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
 
@@ -31,11 +32,30 @@ export default function LeadMagnetForm() {
       return;
     }
 
+    setIsSubmitting(true);
+
+    const newLead = { ...formData, date: new Date().toISOString() };
+
     // Save lead list in localStorage
     const savedLeads = JSON.parse(localStorage.getItem('gabyneuropedia_leads') || '[]');
-    savedLeads.push({ ...formData, date: new Date().toISOString() });
+    savedLeads.push(newLead);
     localStorage.setItem('gabyneuropedia_leads', JSON.stringify(savedLeads));
 
+    // Send to Google Sheet
+    const scriptUrl = (import.meta as any).env?.VITE_GOOGLE_SHEET_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbzDFPfPHTbi6Dnwd4CMVuiLKm6APMWgiGbcELDTRFN-UoO31WIoXQZ5TnS1RF4UxPkYxg/exec";
+    if (scriptUrl) {
+      try {
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors', // Avoids CORS preflight issue
+          body: JSON.stringify(newLead),
+        });
+      } catch (error) {
+        console.error('Error sending data to Google Sheet:', error);
+      }
+    }
+
+    setIsSubmitting(false);
     setIsSubmitted(true);
   };
 
@@ -49,10 +69,16 @@ export default function LeadMagnetForm() {
             <CheckCircle2 className="w-8 h-8" />
           </div>
           <h3 className="text-2xl md:text-3xl font-serif font-bold text-white">
-            ¡Descarga Disponible, {formData.name.split(' ')[0]}!
+            ¡Checklist Disponible, {formData.name.split(' ')[0]}!
           </h3>
-          <p className="text-xs text-slate-300 max-w-md mx-auto">
-            Hemos enviado el Checklist en PDF de 24 puntos y el Método C.L.A.R.O. a tu bandeja de correo: <span className="text-brand-gold font-medium">{formData.email}</span>.
+          <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
+            Ya puedes abrir el Checklist interactivo de 24 puntos. Márcalo en pantalla y, cuando termines, imprime o guarda tu PDF desde el navegador:
+            <span className="text-brand-gold font-medium"> {formData.email}</span>.
+            <br/><br/>
+            <span className="text-amber-400 font-semibold">
+              ⚕️ Recuerda: Este checklist es una guía de observación, NO un diagnóstico médico.
+              Para evaluación formal, agenda una consulta con un especialista en neurodesarrollo.
+            </span>
           </p>
         </div>
 
@@ -60,15 +86,15 @@ export default function LeadMagnetForm() {
         <div className="bg-navy-900 border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
             <span className="text-[10px] tracking-widest font-bold text-brand-gold uppercase">Acceso Instantáneo</span>
-            <h4 className="text-sm font-semibold text-white">Haz clic aquí para descargar el PDF de inmediato:</h4>
+            <h4 className="text-sm font-semibold text-white">Abre el HTML, completa tus marcas y genera tu PDF al finalizar:</h4>
           </div>
-          <a 
-            href="https://static.wixstatic.com/media/745c1a_da936cf81f0840de83b9fecbed351834~mv2.png" 
-            target="_blank" 
+          <a
+            href="/checklist-tdah-24-puntos.html"
+            target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-brand-gold/90 text-navy-950 text-xs font-bold uppercase tracking-wider py-3.5 px-6 rounded-lg shadow-md transition-all shrink-0"
           >
-            <FileDown className="w-4 h-4" /> Bajar PDF Ahora
+            <ClipboardCheck className="w-4 h-4" /> Completar Checklist
           </a>
         </div>
 
@@ -87,7 +113,11 @@ export default function LeadMagnetForm() {
               Tu Checklist es solo la primera página. Entiende el mapa completo.
             </h3>
             <p className="text-slate-300 text-xs lg:text-sm leading-relaxed">
-              El Checklist de observación te ayuda a documentar conductas, pero no soluciona el caos diario del hogar. Para comprender los circuitos de tu hijo y obtener un plan sistemático inmediato, te recomiendo nuestro libro digital estrella:
+              El Checklist te ayuda a <strong className="text-white">documentar conductas</strong>, pero
+              <strong className="text-brand-gold"> no soluciona el caos diario del hogar</strong>.
+              Para comprender los circuitos cerebrales de tu hijo, obtener <strong>estrategias prácticas inmediatas</strong>
+              y aprender el <strong>Método C.L.A.R.O.</strong> completo (Calma, Límites, Autonomía, Rutina, Observación),
+              necesitas nuestro libro digital estrella:
             </p>
           </div>
 
@@ -105,23 +135,19 @@ export default function LeadMagnetForm() {
               <h4 className="text-sm font-bold text-slate-200">Ebook: Sin Filtros (El Cerebro de Mi Hijo No Está Roto)</h4>
               <p className="text-xs text-slate-400">8 capítulos con estrategias prácticas explicadas por una neuropediatra formada en Barcelona. Ciencia pura, sin tecnicismos.</p>
               <div className="flex items-center justify-center md:justify-start gap-3 mt-1">
-                <span className="text-slate-500 line-through text-xs">$27 USD</span>
-                <span className="text-brand-orange font-bold text-lg font-serif">$17 USD</span>
-                <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider bg-emerald-500/10 py-0.5 px-2 rounded">Ahorra 37%</span>
+                <span className="text-slate-500 line-through text-xs">$47 USD</span>
+                <span className="text-brand-orange font-bold text-lg font-serif">$27 USD</span>
+                <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider bg-emerald-500/10 py-0.5 px-2 rounded">Ahorra 43%</span>
               </div>
             </div>
           </div>
 
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-slate-400 text-[10px] italic">
-              Código de descuento en carrito: <span className="text-brand-gold font-bold">NEUROPEDIA10</span>
-            </div>
-            
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-end gap-4">
             <button
               onClick={() => window.open('https://instagram.com/gabyneuropedia', '_blank')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-orange hover:bg-brand-orange/90 text-white text-xs font-bold uppercase tracking-widest py-3 px-6 rounded-lg shadow-md transition-all shrink-0"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-orange hover:bg-brand-orange/90 text-white text-xs font-bold uppercase tracking-widest py-3 px-6 rounded-lg shadow-md hover:shadow-xl transition-all shrink-0"
             >
-              <BookOpen className="w-4 h-4" /> Ver Detalles de Ebook
+              <BookOpen className="w-4 h-4" /> Quiero "Sin Filtros!" Ahora
             </button>
           </div>
 
@@ -143,8 +169,8 @@ export default function LeadMagnetForm() {
       <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/10 rounded-full blur-2xl pointer-events-none" />
 
       <div className="text-center space-y-2">
-        <h3 className="text-2xl font-serif font-bold text-navy-950">Descargar Checklist</h3>
-        <p className="text-xs text-slate-500">Rellena el formulario oficial para recibir el PDF gratuito directamente.</p>
+        <h3 className="text-2xl font-serif font-bold text-navy-950">Completar Checklist</h3>
+        <p className="text-xs text-slate-500">Rellena el formulario para abrir el checklist interactivo y guardar tu PDF al terminar.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -273,9 +299,10 @@ export default function LeadMagnetForm() {
         {/* Submit button */}
         <button
           type="submit"
-          className="w-full bg-brand-orange hover:bg-brand-orange/95 text-white font-bold text-xs uppercase tracking-widest py-3.5 px-4 rounded-lg shadow-md hover:shadow-lg hover:translate-y-[-1px] active:translate-y-[1px] transition-all cursor-pointer"
+          disabled={isSubmitting}
+          className="w-full bg-brand-orange hover:bg-brand-orange/95 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-bold text-xs uppercase tracking-widest py-3.5 px-4 rounded-lg shadow-md hover:shadow-lg hover:translate-y-[-1px] active:translate-y-[1px] transition-all cursor-pointer flex items-center justify-center gap-2"
         >
-          Quiero Descargar el Checklist Gratis
+          {isSubmitting ? 'Enviando...' : 'Quiero Completar el Checklist Gratis'}
         </button>
 
       </form>
