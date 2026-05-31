@@ -2,7 +2,28 @@ import { useState } from 'react';
 import { Award, BookOpen, GraduationCap, Heart } from 'lucide-react';
 
 export default function AboutExpert() {
-  const [imageSrc, setImageSrc] = useState('https://images.unsplash.com/photo-1594824813573-246434de83fb?auto=format&fit=crop&q=80&w=600');
+  // Lista secuencial de fuentes alternativas para la foto de la Dra. Gaby:
+  // 1. Busca archivos locales en tu carpeta 'public/' para que puedas colocar tu foto ahí con cualquiera de estos nombres.
+  // 2. Imagen real de su sitio web oficial (GoDaddy CDN).
+  // 3. Imagen de reserva premium en Unsplash filtrada para coincidir con sus rasgos (médica sonriente con cabello largo oscuro y lentes).
+  const fallbackUrls = [
+    '/dra-gaby-estetoscopio.png',
+    '/dra-gaby-estetoscopio.jpg',
+    '/dra-gaby.png',
+    '/dra-gaby.jpg',
+    'https://img1.wsimg.com/isteam/ip/9f22e577-e86d-46e8-ae9a-1df7d0c2df48/WhatsApp%20Image%202022-02-12%20at%209.21.44%20PM.jpeg',
+    'https://images.unsplash.com/photo-1594824813573-246434de83fb?auto=format&fit=crop&q=80&w=600'
+  ];
+
+  const [fallbackIndex, setFallbackIndex] = useState(0);
+
+  const handleImageError = () => {
+    if (fallbackIndex < fallbackUrls.length - 1) {
+      setFallbackIndex((prev) => prev + 1);
+    }
+  };
+
+  const imageSrc = fallbackUrls[fallbackIndex];
 
   return (
     <section id="sobre-mi" className="py-16 md:py-24 bg-navy-950 text-white relative overflow-hidden">
@@ -25,7 +46,7 @@ export default function AboutExpert() {
               <div className="relative z-10 w-64 h-80 sm:w-72 sm:h-96 rounded-2xl overflow-hidden shadow-2xl border border-white/10">
                 <img 
                   src={imageSrc} 
-                  onError={() => setImageSrc('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=600')}
+                  onError={handleImageError}
                   alt="Dra. María Gabriela Jiménez Méndez" 
                   className="w-full h-full object-cover object-top"
                   referrerPolicy="no-referrer"
